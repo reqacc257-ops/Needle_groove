@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Needle &amp; Groove</string>
+    <string name="widget_description">Previous, play/pause and next controls.</string>
+    <string name="previous_symbol">\u23EE</string>
+    <string name="next_symbol">\u23ED</string>
+    <string name="play_symbol">\u25B6</string>
+    <string name="previous_track">Previous track</string>
+    <string name="next_track">Next track</string>
+    <string name="play_pause">Play or pause</string>
+    <style name="AppTheme" parent="android:style/Theme.Material.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:colorAccent">#F2BF6A</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowBackground">#211719</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+</resources>

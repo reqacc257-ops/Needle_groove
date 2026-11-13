@@ -1,0 +1,71 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.needlegroove.player'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId 'com.needlegroove.player'
+        minSdk 26
+        targetSdk 36
+        versionCode 1
+        versionName '1.0.0'
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+    }
+
+    signingConfigs {
+        release {
+            if (System.getenv('NG_KEYSTORE')) {
+                storeFile file(System.getenv('NG_KEYSTORE'))
+                storePassword System.getenv('NG_STORE_PASSWORD')
+                keyAlias System.getenv('NG_KEY_ALIAS')
+                keyPassword System.getenv('NG_KEY_PASSWORD')
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            if (System.getenv('NG_KEYSTORE')) signingConfig signingConfigs.release
+        }
+    }
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    testOptions {
+        unitTests.includeAndroidResources = true
+    }
+}
+
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
+    implementation 'androidx.activity:activity:1.10.1'
+    implementation 'androidx.media3:media3-exoplayer:1.8.0'
+    implementation 'androidx.media3:media3-session:1.8.0'
+    implementation 'net.jthink:jaudiotagger:3.0.0'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.16'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+}
+
+tasks.register('validatePlaySigning') {
+    doLast {
+        ['NG_KEYSTORE', 'NG_STORE_PASSWORD', 'NG_KEY_ALIAS', 'NG_KEY_PASSWORD'].each { name ->
+            if (!System.getenv(name)) throw new GradleException("Set ${name} before creating a Play upload bundle.")
+        }
+        if (!file(System.getenv('NG_KEYSTORE')).isFile()) throw new GradleException('Upload keystore was not found.')
+    }
+}
+tasks.register('playRelease') {
+    dependsOn 'validatePlaySigning', 'testDebugUnitTest', 'lintRelease', 'bundleRelease'
+}
+tasks.configureEach {
+    if (name == 'bundleRelease') mustRunAfter 'validatePlaySigning'
+}
