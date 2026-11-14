@@ -18,7 +18,7 @@ jobs:
 
       # Installs the Android SDK command-line tools and accepts the licenses so
       # Gradle can fetch compileSdk 36 and the build-tools on its own.
-      - uses: android-actions/setup-android@v3
+      - uses: android-actions/setup-android@v4
 
       - uses: gradle/actions/setup-gradle@v4
 
