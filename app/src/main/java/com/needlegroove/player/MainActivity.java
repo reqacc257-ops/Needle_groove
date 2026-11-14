@@ -383,7 +383,7 @@ public final class MainActivity extends ComponentActivity {
             line.addView(remove, new LinearLayout.LayoutParams(dp(44), dp(44)));
             line.setOnClickListener(view -> {
                 if (controller != null && index < controller.getMediaItemCount()) {
-                    controller.seekToMediaItem(index);
+                    controller.seekToDefaultPosition(index);
                     controller.play();
                     dialog.dismiss();
                 }
